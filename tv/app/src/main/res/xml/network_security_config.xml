@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android blocks cleartext HTTP by default from API 28 on. The laptop server is
+  plain HTTP on the LAN, so cleartext must be permitted for this app.
+
+  This is a blanket allow rather than a per-domain one on purpose: the server's
+  address is a DHCP-assigned LAN IP that changes, and <domain> entries match DNS
+  hostnames, not IP ranges - "192.168.0.0" would never match 192.168.1.38. There
+  is no CIDR syntax available here, so allowing cleartext app-wide is the only
+  approach that actually works for arbitrary home-network addresses.
+
+  The scope is limited to this app, and the app only ever connects to a server
+  the user explicitly chose on their own network.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

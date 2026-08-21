@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kino</string>
+
+    <string name="connect_title">Find your computer</string>
+    <string name="connect_searching">Searching your network…</string>
+    <string name="connect_none">No servers found</string>
+    <string name="connect_manual">Enter address manually</string>
+    <string name="connect_retry">Search again</string>
+
+    <string name="browse_empty">No videos in this folder</string>
+    <string name="browse_shares">Shared folders</string>
+
+    <string name="player_resume">Resume</string>
+    <string name="player_start_over">Start over</string>
+    <string name="player_subtitles">Subtitles</string>
+    <string name="player_subtitles_off">Off</string>
+    <string name="player_audio">Audio</string>
+</resources>

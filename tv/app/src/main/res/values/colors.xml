@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_background">#0D0F14</color>
+    <!-- Same as the background of tools/brand/kino-logo-source.png, so the
+         adaptive icon's background layer and the artwork show no seam. -->
+    <color name="banner_background">#0A0B16</color>
+    <color name="accent">#4C9AFF</color>
+</resources>

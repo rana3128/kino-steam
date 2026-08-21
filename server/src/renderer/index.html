@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self';">
+<title>Kino Server</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Kino Server</h1>
+    <p class="tagline">Share videos from this laptop to your Google TV</p>
+  </div>
+  <div id="status" class="status">
+    <span class="dot"></span><span class="status-text">starting…</span>
+  </div>
+</header>
+
+<div id="error" class="banner error" hidden></div>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <h2>Shared folders</h2>
+      <button id="add-folder" class="primary">Add folder…</button>
+    </div>
+    <ul id="folders" class="folders"></ul>
+    <p id="indexed" class="hint"></p>
+  </section>
+
+  <section class="card">
+    <h2>Connect your TV</h2>
+    <p class="hint">
+      The TV app finds this laptop automatically. If it can't, enter one of these
+      addresses manually on the TV.
+    </p>
+    <ul id="addresses" class="addresses"></ul>
+    <div class="qr-row">
+      <div id="qr" class="qr"></div>
+      <div class="qr-note">
+        <strong>Test it now</strong>
+        <p>Scan this with your phone, or open the address in a browser on any device
+        on the same Wi-Fi. If the page loads there, the TV will work too.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Settings</h2>
+    <div class="field">
+      <label for="name">Server name</label>
+      <input id="name" type="text" maxlength="48" spellcheck="false">
+      <span class="field-hint">Shown in the TV app's server list.</span>
+    </div>
+    <div class="field">
+      <label for="port">Port</label>
+      <input id="port" type="number" min="1024" max="65535">
+      <button id="save-port">Apply</button>
+    </div>
+    <label class="checkbox">
+      <input id="start-on-login" type="checkbox">
+      <span>Start automatically when I sign in to Windows</span>
+    </label>
+  </section>
+
+  <section class="card subtle">
+    <h2>TV can't connect?</h2>
+    <ol class="troubleshoot">
+      <li><strong>Allow the Windows Firewall prompt.</strong> On first run Windows asks
+      whether to allow Kino Server on your network — it must be allowed on
+      <em>Private</em> networks. If you dismissed it, remove the rule in Windows
+      Defender Firewall and restart this app to be asked again.</li>
+      <li><strong>Same network.</strong> Both devices must be on the same router.
+      A 2.4 GHz and 5 GHz band on the same router is fine; a separate "Guest"
+      network is not.</li>
+      <li><strong>Client isolation.</strong> Some mesh routers block device-to-device
+      traffic. Look for "AP isolation" or "Client isolation" in your router settings
+      and turn it off.</li>
+    </ol>
+  </section>
+</main>
+
+<script src="renderer.js"></script>
+</body>
+</html>

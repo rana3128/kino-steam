@@ -1,0 +1,37 @@
+{
+  "name": "kino-server",
+  "version": "1.0.0",
+  "description": "Share video files from Windows to the Kino app on your TV over the home LAN",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "serve": "node src/server/standalone.js",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.2",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.vpsin.kinoserver",
+    "productName": "Kino Server",
+    "files": [
+      "src/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

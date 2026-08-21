@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kino Server — browse</title>
+<style>
+  :root { color-scheme: dark; }
+  body { font: 15px/1.5 system-ui, sans-serif; background: #12141a; color: #e8eaf0; margin: 0; padding: 24px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: #8b93a7; font-size: 13px; margin-bottom: 20px; }
+  #crumbs { margin-bottom: 12px; font-size: 13px; color: #8b93a7; }
+  #crumbs button { background: none; border: none; color: #6cf; cursor: pointer; font: inherit; padding: 0 2px; }
+  ul { list-style: none; padding: 0; margin: 0; max-width: 720px; }
+  li { padding: 10px 12px; border-radius: 6px; cursor: pointer; display: flex; gap: 10px; align-items: center; }
+  li:hover { background: #1e2230; }
+  .size { margin-left: auto; color: #6b7385; font-size: 12px; }
+  .subs { color: #7c5; font-size: 11px; border: 1px solid #384; border-radius: 3px; padding: 1px 5px; }
+  video { width: 100%; max-width: 900px; margin-top: 20px; background: #000; border-radius: 6px; }
+  .empty { color: #6b7385; padding: 12px; }
+</style>
+</head>
+<body>
+<h1>Kino Server</h1>
+<div class="sub" id="info">loading…</div>
+<div id="crumbs"></div>
+<ul id="list"></ul>
+<video id="player" controls hidden></video>
+
+<script>
+const list = document.getElementById('list');
+const crumbs = document.getElementById('crumbs');
+const player = document.getElementById('player');
+
+function fmtSize(b) {
+  if (!b) return '';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let i = 0, n = b;
+  while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
+  return n.toFixed(i > 1 ? 1 : 0) + ' ' + units[i];
+}
+
+async function load(id) {
+  const url = id ? `/api/browse?path=${encodeURIComponent(id)}` : '/api/browse';
+  const data = await (await fetch(url)).json();
+
+  crumbs.innerHTML = '';
+  const home = document.createElement('button');
+  home.textContent = 'Shares';
+  home.onclick = () => load(null);
+  crumbs.append(home);
+  for (const c of data.path) {
+    crumbs.append(document.createTextNode(' / '));
+    const b = document.createElement('button');
+    b.textContent = c.name;
+    b.onclick = () => load(c.id);
+    crumbs.append(b);
+  }
+
+  list.innerHTML = '';
+  if (!data.entries.length) {
+    list.innerHTML = '<li class="empty">No videos here.</li>';
+    return;
+  }
+  for (const e of data.entries) {
+    const li = document.createElement('li');
+    const icon = e.type === 'folder' ? '📁' : '🎬';
+    li.append(document.createTextNode(icon + ' ' + e.name));
+    if (e.subtitles && e.subtitles.length) {
+      const tag = document.createElement('span');
+      tag.className = 'subs';
+      tag.textContent = 'CC ' + e.subtitles.length;
+      li.append(tag);
+    }
+    const size = document.createElement('span');
+    size.className = 'size';
+    size.textContent = fmtSize(e.size);
+    li.append(size);
+
+    li.onclick = () => {
+      if (e.type === 'folder') return load(e.id);
+      play(e);
+    };
+    list.append(li);
+  }
+}
+
+function play(file) {
+  player.hidden = false;
+  player.innerHTML = '';
+  player.src = `/api/files/${file.id}/stream`;
+  for (const s of file.subtitles || []) {
+    const track = document.createElement('track');
+    track.kind = 'subtitles';
+    track.label = s.label + ' (' + s.lang + ')';
+    track.srclang = s.lang === 'und' ? 'en' : s.lang;
+    track.src = `/api/files/${file.id}/subtitles/${s.id}?format=vtt`;
+    player.append(track);
+  }
+  player.play().catch(() => {});
+  player.scrollIntoView({ behavior: 'smooth' });
+}
+
+fetch('/api/info').then(r => r.json()).then(i => {
+  document.getElementById('info').textContent =
+    `${i.name} · v${i.version} · ${i.shares} shared folder(s) · ${i.addresses.join(', ')}`;
+});
+load(null);
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+# Node
+server/node_modules/
+server/dist/
+
+# Android build
+tv/.gradle/
+tv/build/
+tv/app/build/
+tv/local.properties
+
+# Keys — never commit
+*.jks
+*.keystore
+gradle.properties
+
+# Store assets (large PNGs, not source)
+store/
+
+# Tools working files
+tools/brand/rejected-gemini-lockup.png
+
+# Claude Code internal
+.claude/
+
+# Kotlin compiler sessions
+tv/.kotlin/
+
+# Original chat log
+chat.txt
+
+# OS
+.DS_Store
+Thumbs.db
